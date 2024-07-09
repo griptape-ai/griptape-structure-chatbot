@@ -1,16 +1,18 @@
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { Stack, StackProps, Tags } from "aws-cdk-lib";
+import { Construct } from "constructs";
+import { GriptapeStructureChatbot } from "./constructs/griptape-structure-chatbot";
 
-export class GriptapeStructureChatbotStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+export class GriptapeStructureChatbotStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
-
-    // example resource
-    // const queue = new sqs.Queue(this, 'GriptapeStructureChatbotQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    const griptapeStructureChatbot = new GriptapeStructureChatbot(
+      this,
+      "GriptapeStructureChatbot"
+    );
+    Tags.of(griptapeStructureChatbot).add(
+      "created-by",
+      "griptape-structure-chatbot"
+    );
   }
 }
