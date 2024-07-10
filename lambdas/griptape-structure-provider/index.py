@@ -1,6 +1,6 @@
 import json
 import os
-import requests
+import urllib3
 from clients.griptape_api_client import GriptapeApiClient
 
 griptape_api_key_secret_name = os.environ.get("GRIPTAPE_API_KEY_SECRET_NAME")
@@ -12,46 +12,49 @@ github_repo_owner = os.getenv("GITHUB_REPO_OWNER", "griptape-ai")
 github_repo_name = os.getenv("GITHUB_REPO_NAME", "griptape-structure-chatbot")
 github_structure_branch = os.getenv("GITHUB_REPO_BRANCH", "main")
 
+http = urllib3.PoolManager()
+
 
 def get_griptape_api_key() -> str:
     secrets_extension_endpoint = f"http://localhost:{secrets_extension_port}/secretsmanager/get?secretId={griptape_api_key_secret_name}"
     headers = {"X-Aws-Parameters-Secrets-Token": os.environ.get("AWS_SESSION_TOKEN")}
-    r = requests.get(secrets_extension_endpoint, headers=headers)
-    return json.loads(r.text)["SecretString"]
+    r = http.request("GET", secrets_extension_endpoint, headers=headers)  # type: ignore
+    return json.loads(r.data)["SecretString"]
 
 
 def get_openai_api_key() -> str:
     secrets_extension_endpoint = f"http://localhost:{secrets_extension_port}/secretsmanager/get?secretId={openai_api_key_secret_name}"
     headers = {"X-Aws-Parameters-Secrets-Token": os.environ.get("AWS_SESSION_TOKEN")}
-    r = requests.get(secrets_extension_endpoint, headers=headers)
-    return json.loads(r.text)["SecretString"]
+    r = http.request("GET", secrets_extension_endpoint, headers=headers)  # type: ignore
+    return json.loads(r.data)["SecretString"]
 
 
 def get_griptape_aws_user_secret() -> tuple:
     secrets_extension_endpoint = f"http://localhost:{secrets_extension_port}/secretsmanager/get?secretId={griptape_aws_user_secret_name}"
     headers = {"X-Aws-Parameters-Secrets-Token": os.environ.get("AWS_SESSION_TOKEN")}
-    r = requests.get(secrets_extension_endpoint, headers=headers)
-    secret = json.loads(r.text)["SecretString"]
-    return secret["accessKeyId"], secret["secretAccessKey"]
-
-
-griptape_api_key = get_griptape_api_key()
-griptape_api_client = GriptapeApiClient(api_key=griptape_api_key)
+    r = http.request("GET", secrets_extension_endpoint, headers=headers)  # type: ignore
+    secret_string = json.loads(r.data)["SecretString"]
+    secret_json = json.loads(secret_string)
+    return secret_json["accessKeyId"], secret_json["secretAccessKey"]
 
 
 def on_event(event, context):
     print(event)
     request_type = event["RequestType"]
+
+    griptape_api_key = get_griptape_api_key()
+    griptape_api_client = GriptapeApiClient(api_key=griptape_api_key)
+
     if request_type == "Create":
-        return on_create(event)
+        return on_create(event, griptape_api_client, griptape_api_key)
     if request_type == "Update":
-        return on_update(event)
+        return on_update(event, griptape_api_client)
     if request_type == "Delete":
-        return on_delete(event)
+        return on_delete(event, griptape_api_client)
     raise Exception("Invalid request type: %s" % request_type)
 
 
-def on_create(event):
+def on_create(event, griptape_api_client, griptape_api_key):
     props = event["ResourceProperties"]
     print("create new resource with props %s" % props)
 
@@ -70,6 +73,9 @@ def on_create(event):
         "env": {
             "AWS_ACCESS_KEY_ID": aws_access_key_id,
             "AWS_DEFAULT_REGION": os.environ["AWS_REGION"],
+            "CONVERSATION_MEMORY_TABLE_NAME": os.environ[
+                "CONVERSATION_MEMORY_TABLE_NAME"
+            ],
         },
         "env_secret": {
             "OPENAI_API_KEY": get_openai_api_key(),
@@ -89,7 +95,7 @@ def on_create(event):
     return {"PhysicalResourceId": physical_id}
 
 
-def on_update(event):
+def on_update(event, griptape_api_client):
     physical_id = event["PhysicalResourceId"]
     props = event["ResourceProperties"]
     print("update resource %s with props %s" % (physical_id, props))
@@ -97,7 +103,7 @@ def on_update(event):
     structure_response = griptape_api_client.update_structure(physical_id, props)
 
 
-def on_delete(event):
+def on_delete(event, griptape_api_client):
     physical_id = event["PhysicalResourceId"]
     print("delete resource %s" % physical_id)
 

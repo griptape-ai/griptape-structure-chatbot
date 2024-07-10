@@ -5,14 +5,13 @@
     "griptape-structure-chatbot": "bin/griptape-structure-chatbot.js"
   },
   "scripts": {
+    "bootstrap": "cdk bootstrap",
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "deploy": "./create_gt_api_key_secret.sh && cdk deploy",
-    "deploy-env": "source .env && npm run-script deploy",
-    "synth": "cdk synth",
-    "synth-env": "source .env && cdk synth"
+    "deploy": "./create_api_key_secrets.sh && cdk deploy",
+    "synth": "cdk synth"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

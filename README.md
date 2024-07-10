@@ -12,6 +12,18 @@ You need:
 1. The [aws-cli installed](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 1. AWS credentials or aws sso configured
 
+### AWS CDK
+
+You need:
+
+1. The [aws-cdk](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) installed
+
+### Docker
+
+You need:
+
+1. [Docker](https://docs.docker.com/engine/install/) installed
+
 ### Griptape Cloud
 
 You need:
@@ -35,7 +47,24 @@ You need:
     eval $(aws configure export-credentials --profile <profile> --format env)
     ```
 
-1.  npm run deploy-env
+1.  `npm run bootstrap`
+1.  `npm run deploy`
+
+## Invoke
+
+Invoke the endpoint as follows:
+
+1. Retrieve a session_id
+
+```
+curl --json '{"operation": "create_session"}' https://<YOUR_LAMBDA_URL_ID>.lambda-url.<REGION>.on.aws/
+```
+
+1. Send a message
+
+```
+curl --json '{"operation": "message", "session_id": "<RETRIEVED_SESSION_ID>", "input": "<YOUR_CHAT_INPUT>"}' https://<YOUR_LAMBDA_URL_ID>.lambda-url.<REGION>.on.aws/
+```
 
 ## Useful commands
 

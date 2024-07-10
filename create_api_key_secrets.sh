@@ -22,9 +22,8 @@ fi
 
 secret_name="griptape-api-key"
 command_output=$(aws secretsmanager describe-secret --secret-id $secret_name --region ${CDK_DEFAULT_REGION})
-command_exit_code=$?
 
-if [[ "$command_exit_code" -ne 0 ]]; then
+if [[ "$?" -ne 0 ]]; then
     echo "Creating secret $secret_name"
     aws secretsmanager create-secret --name $secret_name --secret-string "${GRIPTAPE_API_KEY}" --region ${CDK_DEFAULT_REGION}
 
@@ -34,12 +33,12 @@ if [[ "$command_exit_code" -ne 0 ]]; then
     else
         echo "Successfully created secret $secret_name"
     fi
+fi
 
 secret_name="openai-api-key"
 command_output=$(aws secretsmanager describe-secret --secret-id $secret_name --region ${CDK_DEFAULT_REGION})
-command_exit_code=$?
 
-if [[ "$command_exit_code" -ne 0 ]]; then
+if [[ $? -ne 0 ]]; then
     echo "Creating secret $secret_name"
     aws secretsmanager create-secret --name $secret_name --secret-string "${OPENAI_API_KEY}" --region ${CDK_DEFAULT_REGION}
 
@@ -49,3 +48,4 @@ if [[ "$command_exit_code" -ne 0 ]]; then
     else
         echo "Successfully created secret $secret_name"
     fi
+fi

@@ -1,6 +1,7 @@
 import {
   CfnOutput,
   CustomResource,
+  Duration,
   RemovalPolicy,
   SecretValue,
 } from "aws-cdk-lib";
@@ -17,7 +18,7 @@ import { PythonFunction } from "@aws-cdk/aws-lambda-python-alpha";
 import { Secret } from "aws-cdk-lib/aws-secretsmanager";
 import { Provider } from "aws-cdk-lib/custom-resources";
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
-import { AccessKey, User } from "aws-cdk-lib/aws-iam";
+import { AccessKey, AnyPrincipal, User } from "aws-cdk-lib/aws-iam";
 
 export interface GriptapeStructureChatbotProps {}
 
@@ -43,6 +44,9 @@ export class GriptapeStructureChatbot extends Construct {
     const awsUser = new User(this, "GriptapeChatbotUser", {
       userName: "griptape-chatbot-user",
     });
+
+    conversationMemoryTable.grantReadWriteData(awsUser);
+
     const accessKey = new AccessKey(this, "GriptapeChatbotAccessKey", {
       user: awsUser,
     });
@@ -88,13 +92,16 @@ export class GriptapeStructureChatbot extends Construct {
         entry: "lambdas/griptape-structure-provider",
         runtime: Runtime.PYTHON_3_12,
         index: "index.py",
+        handler: "on_event",
         environment: {
           SECRETS_EXTENSION_HTTP_PORT: `${secretsHttpPort}`,
           GRIPTAPE_API_KEY_SECRET_NAME: griptapeApiKeySecret.secretName,
           GRIPTAPE_AWS_USER_SECRET_NAME: griptapeUserSecret.secretName,
           OPENAI_API_KEY_SECRET_NAME: openaiApiKeySecret.secretName,
+          CONVERSATION_MEMORY_TABLE_NAME: conversationMemoryTable.tableName,
         },
         paramsAndSecrets,
+        memorySize: 1024,
       }
     );
     griptapeUserSecret.grantRead(griptapeStructureProviderLambda);
@@ -124,19 +131,26 @@ export class GriptapeStructureChatbot extends Construct {
       this,
       "GriptapeChatbotLambda",
       {
+        description:
+          "Griptape Chatbot Lambda function to invoke a Griptape Structure",
         entry: "lambdas/griptape-chatbot",
         runtime: Runtime.PYTHON_3_12,
         index: "index.py",
         handler: "handler",
         environment: {
           SECRETS_EXTENSION_HTTP_PORT: `${secretsHttpPort}`,
-          TABLE_NAME: conversationMemoryTable.tableName,
+          DYNAMODB_TABLE_NAME: conversationMemoryTable.tableName,
           GRIPTAPE_API_KEY_SECRET_NAME: griptapeApiKeySecret.secretName,
           GT_CLOUD_STRUCTURE_ID: griptapeStructureProviderResource.ref,
         },
         paramsAndSecrets,
+        memorySize: 1024,
+        timeout: Duration.minutes(5),
       }
     );
+    griptapeChatbotLambda.addPermission("Invoke", {
+      principal: new AnyPrincipal(),
+    });
 
     const fnUrl = griptapeChatbotLambda.addFunctionUrl({
       authType: FunctionUrlAuthType.NONE,
