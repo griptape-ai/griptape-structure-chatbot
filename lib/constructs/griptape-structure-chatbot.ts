@@ -19,6 +19,7 @@ import { Secret } from "aws-cdk-lib/aws-secretsmanager";
 import { Provider } from "aws-cdk-lib/custom-resources";
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { AccessKey, AnyPrincipal, User } from "aws-cdk-lib/aws-iam";
+import { Environment } from "aws-cdk-lib/aws-appconfig";
 
 export interface GriptapeStructureChatbotProps {}
 
@@ -124,6 +125,9 @@ export class GriptapeStructureChatbot extends Construct {
       "GriptapeStructureProviderResource",
       {
         serviceToken: griptapeStructureProvider.serviceToken,
+        properties: {
+          github_repo_branch: process.env.GITHUB_REPO_BRANCH,
+        }
       }
     );
 
