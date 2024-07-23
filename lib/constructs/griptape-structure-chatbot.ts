@@ -36,7 +36,7 @@ export class GriptapeStructureChatbot extends Construct {
       {
         billing: Billing.onDemand(),
         partitionKey: { name: "id", type: AttributeType.STRING },
-        tableName: "ConversationMemoryTable",
+        tableName: process.env.TABLE_NAME || "ConversationMemoryTable",
         removalPolicy: RemovalPolicy.DESTROY,
       }
     );

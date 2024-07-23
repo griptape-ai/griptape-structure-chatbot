@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source .env
+
 if [[ -z "${CDK_DEFAULT_ACCOUNT}" ]]; then
     echo "CDK_DEFAULT_ACCOUNT is not set. Exiting."
     exit 1
