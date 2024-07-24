@@ -2,7 +2,7 @@ import json
 import boto3
 import os
 import sys
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 from uuid import uuid4 as uuid
 from griptape.config import OpenAiStructureConfig
 from griptape.rules import Rule, Ruleset
@@ -14,7 +14,7 @@ from griptape.drivers import (
 from griptape.events import EventListener
 from griptape.memory.structure import ConversationMemory
 
-load_dotenv()
+#load_dotenv()
 
 base_url = os.environ["GT_CLOUD_BASE_URL"]
 api_key = os.environ["GT_CLOUD_API_KEY"]
@@ -60,9 +60,9 @@ def init_structure(session_id: str) -> Structure:
             event_listeners=[EventListener(driver=event_driver)], 
         )
         return agent
-    except Exception as e:
+    except:
         #ERROR HANDLING!!! Have it do something better when there is no session_id. 
-        print(f"Failed to initialize structure for: {e}")
+        print(f"Failed to initialize structure")
         return ValueError("Failed to initialize structure")
     
     
