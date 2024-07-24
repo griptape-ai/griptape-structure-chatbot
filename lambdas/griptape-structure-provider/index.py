@@ -102,7 +102,7 @@ def on_update(event, griptape_api_client, griptape_api_key):
     props_past = event["OldResourceProperties"]
     print("update resource %s with props %s" % (physical_id, props))
     # If the branch has changed, then redo the structure.
-    if json.loads(props)["github_repo_branch"] != json.loads(props_past)["github_repo_branch"]: #If the repository has changed, run update.
+    if props["github_repo_branch"] != props_past["github_repo_branch"]: #If the repository has changed, run update.
         #Returns a new Physical ID, this should trigger the deletion. 
         return on_create(event, griptape_api_client, griptape_api_key)
 

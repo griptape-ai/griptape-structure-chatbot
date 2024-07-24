@@ -17,9 +17,8 @@ from griptape.memory.structure import ConversationMemory
 
 base_url = os.environ["GT_CLOUD_BASE_URL"]
 api_key = os.environ["GT_CLOUD_API_KEY"]
-conversation_memory_table_name = os.environ["TABLE_NAME"]
-#conversation_memory_table_name = "ConversationMemoryTable"
-table_name = os.environ["TABLE_NAME"]
+conversation_memory_table_name = os.environ.get("CONVERSATION_MEMORY_TABLE_NAME")
+table_name = os.environ["DYNAMODB_TABLE_NAME"]
 griptape_api_key_secret_name = os.environ.get("GRIPTAPE_API_KEY_SECRET_NAME")
 
 
