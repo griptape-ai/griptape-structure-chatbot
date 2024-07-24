@@ -56,7 +56,6 @@ def on_event(event, context):
 
 def on_create(event, griptape_api_client, griptape_api_key):
     props = event["ResourceProperties"]
-    # Is there a way to get my griptape_branch from what I passed in? Definitely yet but i don't want to mess it up. 
     print("create new resource with props %s" % props)
 
     aws_access_key_id, aws_secret_access_key = get_griptape_aws_user_secret()
