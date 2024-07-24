@@ -97,6 +97,7 @@ def on_create(event, griptape_api_client, griptape_api_key):
 
 def on_update(event, griptape_api_client, griptape_api_key):
     # Check to see if this section is correct
+    
     physical_id = event["PhysicalResourceId"] 
     props = event["ResourceProperties"]
     props_past = event["OldResourceProperties"]

@@ -32,7 +32,7 @@ class GriptapeApiClient:
     def update_structure(self, structure_id: str, params: Optional[dict]) -> dict:
         url = urljoin(self.base_url, f"/api/structures/{structure_id}/")
         response = requests.post(url, headers=self.headers, json=params)
-
+        
         response.raise_for_status()
 
         return response.json()

@@ -2,6 +2,7 @@ import json
 import boto3
 import os
 import sys
+from dotenv import load_dotenv
 from uuid import uuid4 as uuid
 from griptape.config import OpenAiStructureConfig
 from griptape.rules import Rule, Ruleset
@@ -13,13 +14,13 @@ from griptape.drivers import (
 from griptape.events import EventListener
 from griptape.memory.structure import ConversationMemory
 
+load_dotenv()
 
 base_url = os.environ["GT_CLOUD_BASE_URL"]
 api_key = os.environ["GT_CLOUD_API_KEY"]
 conversation_memory_table_name = os.environ.get("CONVERSATION_MEMORY_TABLE_NAME", "ConversationMemoryTable")
 #conversation_memory_table_name = os.environ["TABLE_NAME"]
 table_name = os.environ.get("DYNAMODB_TABLE_NAME", "ConversationMemoryTable")
-griptape_api_key_secret_name = os.environ.get("GRIPTAPE_API_KEY_SECRET_NAME")
 
 
 #Publish events to the griptape cloud.
@@ -58,11 +59,13 @@ def init_structure(session_id: str) -> Structure:
             rulesets=rulesets,
             event_listeners=[EventListener(driver=event_driver)], 
         )
-    except:
+        return agent
+    except Exception as e:
         #ERROR HANDLING!!! Have it do something better when there is no session_id. 
-        print(f"Failed to initialize structure")
+        print(f"Failed to initialize structure for: {e}")
+        return ValueError("Failed to initialize structure")
     
-    return agent
+    
 
 #This is the part that is causing the error: specifically json.loads
 if __name__ == "__main__":
