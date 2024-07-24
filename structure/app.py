@@ -22,11 +22,11 @@ table_name = os.environ.get("DYNAMODB_TABLE_NAME", "ConversationMemoryTable")
 griptape_api_key_secret_name = os.environ.get("GRIPTAPE_API_KEY_SECRET_NAME")
 
 
-#Publish events to the griptape cloud- Doesn't necessarily need to run locally? / no Structure_RUn_Id when running locally
+#Publish events to the griptape cloud.
 event_driver = GriptapeCloudEventListenerDriver(base_url=base_url, api_key=api_key)
 
 
-#Changed this to Structure instead of agent - Is that ok? TODO: Check this 
+
 def init_structure(session_id: str) -> Structure:
 
     rulesets = [
@@ -59,7 +59,7 @@ def init_structure(session_id: str) -> Structure:
             event_listeners=[EventListener(driver=event_driver)], 
         )
     except:
-        #ERROR HANDLING!!! 
+        #ERROR HANDLING!!! Have it do something better when there is no session_id. 
         print(f"Failed to initialize structure")
     
     return agent

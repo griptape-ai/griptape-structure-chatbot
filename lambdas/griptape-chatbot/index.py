@@ -3,7 +3,6 @@ import json
 import os
 import urllib3
 from uuid import uuid4 as uuid
-from clients.griptape_api_client import GriptapeApiClient
 
 griptape_api_key_secret_name = os.environ.get("GRIPTAPE_API_KEY_SECRET_NAME")
 secrets_extension_port = os.environ["SECRETS_EXTENSION_HTTP_PORT"]
@@ -28,21 +27,8 @@ def handler(event, context):
     match operation:
         case "create_session":
             return handle_create_session()
-        case "message":
-            return handle_message(event_body["input"], event_body["session_id"])
         case _:
             return {"message": "Operation not supported"}
-
-
-def handle_message(input: str, session_id: str) -> dict:
-    griptape_api_client = GriptapeApiClient(api_key=get_griptape_api_key())
-    arg = {
-        "input": input,
-        "session_id": session_id,
-    }
-    output = griptape_api_client.run(structure_id, [json.dumps(arg)])
-
-    return {"output": output}
 
 
 def handle_create_session() -> dict:
@@ -54,7 +40,6 @@ def _get_unique_session_id() -> str:
     session = boto3.Session()
     dynamodb = session.resource("dynamodb")
     table = dynamodb.Table(table_name)  # type: ignore
-
     session_id = ""
     response = {"Item": None}
     while "Item" in response:
