@@ -2,7 +2,7 @@ import json
 import boto3
 import os
 import sys
-import uuid
+from uuid import uuid4 as uuid
 from griptape.config import OpenAiStructureConfig
 from griptape.rules import Rule, Ruleset
 from griptape.structures import Agent, Structure
