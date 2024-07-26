@@ -20,6 +20,7 @@ load_dotenv()
 
 # Get environment variables 
 base_url = os.environ["GT_CLOUD_BASE_URL"]
+# If no API key is provided, will default to an empty string since it isn't necessary for local development.
 api_key = os.environ.get("GT_CLOUD_API_KEY", "")
 
 # If running in the cloud, will load these variables from the cloud environment. Otherwise will default to "ConversationMemoryTable". 
@@ -29,7 +30,7 @@ table_name = os.environ.get("DYNAMODB_TABLE_NAME", "ConversationMemoryTable")
 #Create an event listener for the GriptapeCloudStructure
 event_driver = GriptapeCloudEventListenerDriver(base_url=base_url, api_key=api_key)
 
-
+# If using your own agent, replace the logic with your own agent initialization logic with the conversation memory configuration.
 def init_structure(session_id: str) -> Structure:
 
     # TODO: Define your own rulesets and tools here. 
@@ -46,7 +47,6 @@ def init_structure(session_id: str) -> Structure:
     ]
 
     try:
-        # If using your own agent, replace the logic in init_structure with your own agent initialization logic. 
         agent = Agent(
             config=OpenAiStructureConfig(),
             # TODO: If configuring with your own agent, copy and use this conversation memory configuration. 
@@ -78,5 +78,5 @@ def init_structure(session_id: str) -> Structure:
 if __name__ == "__main__":
     input_arg = sys.argv[1]
     input_arg_dict = json.loads(input_arg)
-    agent = init_structure(input_arg_dict["session_id"]) # Initialize the structure with the session_id; important for Conversation Memory. 
+    agent = init_structure(input_arg_dict["session_id"]) # Initialize the structure with the session_id for Cloud based Conversation Memory. 
     agent.run(input_arg_dict["input"])
