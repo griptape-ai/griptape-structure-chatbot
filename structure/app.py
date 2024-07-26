@@ -16,15 +16,12 @@ from griptape.memory.structure import ConversationMemory
 load_dotenv()
 
 base_url = os.environ["GT_CLOUD_BASE_URL"]
-api_key = os.environ["GT_CLOUD_API_KEY"]
+api_key = os.environ.get("GT_CLOUD_API_KEY", "")
 conversation_memory_table_name = os.environ.get("CONVERSATION_MEMORY_TABLE_NAME", "ConversationMemoryTable")
 table_name = os.environ.get("DYNAMODB_TABLE_NAME", "ConversationMemoryTable")
 
-
 #Publish events to the griptape cloud.
 event_driver = GriptapeCloudEventListenerDriver(base_url=base_url, api_key=api_key)
-
-
 
 def init_structure(session_id: str) -> Structure:
 
