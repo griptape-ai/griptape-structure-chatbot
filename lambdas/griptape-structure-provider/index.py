@@ -96,15 +96,13 @@ def on_create(event, griptape_api_client, griptape_api_key):
 
 
 def on_update(event, griptape_api_client, griptape_api_key):
-    # Check to see if this section is correct
-    
     physical_id = event["PhysicalResourceId"] 
     props = event["ResourceProperties"]
     props_past = event["OldResourceProperties"]
     print("update resource %s with props %s" % (physical_id, props))
-    # If the branch has changed, then redo the structure.
-    if props["github_repo_branch"] != props_past["github_repo_branch"]: #If the repository has changed, run update.
-        #Returns a new Physical ID, this should trigger the deletion. 
+    # If the branch has changed, the structure is re-created. 
+    if props["github_repo_branch"] != props_past["github_repo_branch"]:
+        # Creates a new structure  
         aws_access_key_id, aws_secret_access_key = get_griptape_aws_user_secret()
         create_structure_params = {
             "name": "Griptape Structure Chatbot",
@@ -135,6 +133,7 @@ def on_update(event, griptape_api_client, griptape_api_key):
             params=create_structure_params
         )
         physical_id = structure_response["structure_id"]
+        # Returns a new PhysicalResourceId, which triggers the deletion of the old structure. 
         return {"PhysicalResourceId": physical_id}
 
     structure_response = griptape_api_client.update_structure(physical_id, props)
