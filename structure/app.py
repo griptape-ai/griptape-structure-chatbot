@@ -3,7 +3,6 @@ import boto3
 import os
 import sys
 from dotenv import load_dotenv
-from uuid import uuid4 as uuid
 from griptape.config import OpenAiStructureConfig
 from griptape.rules import Rule, Ruleset
 from griptape.structures import Agent, Structure
@@ -19,7 +18,6 @@ load_dotenv()
 base_url = os.environ["GT_CLOUD_BASE_URL"]
 api_key = os.environ["GT_CLOUD_API_KEY"]
 conversation_memory_table_name = os.environ.get("CONVERSATION_MEMORY_TABLE_NAME", "ConversationMemoryTable")
-#conversation_memory_table_name = os.environ["TABLE_NAME"]
 table_name = os.environ.get("DYNAMODB_TABLE_NAME", "ConversationMemoryTable")
 
 
@@ -49,7 +47,6 @@ def init_structure(session_id: str) -> Structure:
                     session=boto3.Session(
                         aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
                         aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
-                        region_name=os.environ["CDK_DEFAULT_REGION"],
                     ),
                     table_name=conversation_memory_table_name,
                     partition_key="id",
@@ -62,14 +59,10 @@ def init_structure(session_id: str) -> Structure:
         )
         return agent
     except Exception as e:
-        #ERROR HANDLING!!! Have it do something better when there is no session_id. 
-        print("foo")
         print(f'Failed to initialize structure. {e}')
         raise e
     
     
-
-#This is the part that is causing the error: specifically json.loads
 if __name__ == "__main__":
     input_arg = sys.argv[1]
     input_arg_dict = json.loads(input_arg)
