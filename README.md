@@ -20,6 +20,9 @@ Follow the instructions for your OS.
 ```shell
     aws configure sso
 ```
+
+Values for the SSO: 
+
 `SSO session name (Recommended): my-sso`
 
 `SSO start URL [None]: <YourStartURL>`
@@ -37,6 +40,9 @@ Follow the instructions for your OS.
 You need:
 
 1. Node.js installed
+
+This is necessary in order to use and deploy aws-cdk. 
+
 ```shell
     https://nodejs.org/en/download/package-manager
 ```
@@ -77,20 +83,50 @@ To run the structure with Gradio, you need to clone and configure the Griptape C
 ## Environment Setup
 
 ### If you plan on modifying the structure to be deployed to the cloud: 
-1. Create your own Repository on Github
-1. Copy the code into your repository 
-1. Set the .env variables based on your information.
+    1. Create your own Repository on Github
+    1. Copy the code into your repository 
+    1. Set the .env variables based on your information.
 ```shell
-    GITHUB_REPO_OWNER=<your-owner>
-    GITHUB_REPO_NAME=<your-repo-name>
-    GITHUB_REPO_BRANCH=<your-branch>
+        GITHUB_REPO_OWNER=<your-owner>
+        GITHUB_REPO_NAME=<your-repo-name>
+        GITHUB_REPO_BRANCH=<your-branch>
 ```
+    Put your structure in place of the structure/app.py, but add the conversation_memory to YOUR agent.
+
+```python
+    conversation_memory=ConversationMemory(
+        driver=AmazonDynamoDbConversationMemoryDriver(
+            session=boto3.Session(
+                aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
+                aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
+            ),
+            table_name=conversation_memory_table_name,
+            partition_key="id",
+            partition_key_value=session_id, 
+            value_attribute_key="value",
+        )
+    )
+```
+    Keep the parsing information at the bottom of the app.py - this is necessary for the way that Gradio passes in the session_id and inputs. 
+
+    Define your agent in the function init_structure in order to pass the session_id when initializing the conversation memory. 
+
+```python
+    # TODO: Keep this logic for running your own structure
+    if __name__ == "__main__":
+        input_arg = sys.argv[1]
+        input_arg_dict = json.loads(input_arg)
+        agent = init_structure(input_arg_dict["session_id"])
+        agent.run(input_arg_dict["input"])
+```
+
+
 ### If you do not plan on modifying the structure: 
-1. Clone the Repository
+    1. Clone the Repository
 ```shell
-    git clone git!@github.com:griptape-ai/griptape-structure-chatbot.git
+        git clone git!@github.com:griptape-ai/griptape-structure-chatbot.git
 ```
-Install dependencies
+### Install dependencies
 ```shell
     npm install
 ```
