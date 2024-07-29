@@ -21,8 +21,11 @@ Follow the instructions for your OS.
     aws configure sso
 ```
 `SSO session name (Recommended): my-sso`
+
 `SSO start URL [None]: <YourStartURL>`
+
 `SSO region [None]: <YourRegion>`
+
 `SSO registration scopes [None]: sso:account:access`
 
 ```shell
