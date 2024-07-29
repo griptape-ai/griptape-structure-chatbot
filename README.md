@@ -83,15 +83,15 @@ To run the structure with Gradio, you need to clone and configure the Griptape C
 ## Environment Setup
 
 ### If you plan on modifying the structure to be deployed to the cloud: 
-    1. Create your own Repository on Github
-    1. Copy the code into your repository 
-    1. Set the .env variables based on your information.
+1. Create your own Repository on Github
+1. Copy the code into your repository 
+1. Set the .env variables based on your information.
 ```shell
         GITHUB_REPO_OWNER=<your-owner>
         GITHUB_REPO_NAME=<your-repo-name>
         GITHUB_REPO_BRANCH=<your-branch>
 ```
-    Put your structure in place of the structure/app.py, but add the conversation_memory to YOUR agent.
+Put your structure in place of the structure/app.py, but add the conversation_memory to YOUR agent.
 
 ```python
     conversation_memory=ConversationMemory(
@@ -107,9 +107,9 @@ To run the structure with Gradio, you need to clone and configure the Griptape C
         )
     )
 ```
-    Keep the parsing information at the bottom of the app.py - this is necessary for the way that Gradio passes in the session_id and inputs. 
+Keep the parsing information at the bottom of the app.py - this is necessary for the way that Gradio passes in the session_id and inputs. 
 
-    Define your agent in the function init_structure in order to pass the session_id when initializing the conversation memory. 
+Define your agent in the function init_structure in order to pass the session_id when initializing the conversation memory. 
 
 ```python
     # TODO: Keep this logic for running your own structure
