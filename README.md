@@ -149,10 +149,16 @@ If you change any environment variables
 ## Run Structure in GriptapeCloud with Griptape Chat
 After you deploy the structure
 1. Get the Structure ID from the Griptape Structure Chatbot: https://cloud.griptape.ai/structures
-1. Put the Structure ID in your .env from [Griptape Chat](https://github.com/griptape-ai/griptape-chat)
+1. Put the Structure ID in your .env in [Griptape Chat](https://github.com/griptape-ai/griptape-chat)
+```shell
+GT_STRUCTURE_ID=<your-structure-id>
+```
 1. Run Griptape Chat
-
-## Invoke
+In your CLI in the Griptape Chat folder
+```shell 
+poetry python run app.py 
+```
+## Invoke the Lambda Function
 
 Invoke the endpoint as follows:
 
@@ -160,12 +166,6 @@ Invoke the endpoint as follows:
 
 ```
 curl --json '{"operation": "create_session"}' https://<YOUR_LAMBDA_URL_ID>.lambda-url.<REGION>.on.aws/
-```
-
-1. Send a message
-
-```
-curl --json '{"operation": "message", "session_id": "<RETRIEVED_SESSION_ID>", "input": "<YOUR_CHAT_INPUT>"}' https://<YOUR_LAMBDA_URL_ID>.lambda-url.<REGION>.on.aws/
 ```
 
 ## Useful commands
