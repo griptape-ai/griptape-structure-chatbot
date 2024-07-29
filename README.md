@@ -129,6 +129,8 @@ Prerequisites:
 ```shell
     GT_CLOUD_BASE_URL=http://127.0.0.1:5000
 ```
+*http://127.0.0.1:5000 is the default for Skatepark, but you can configure this when running gt skatepark start*
+
 ## Run 
 1. Start in Skatepark: 
 ``` shell
