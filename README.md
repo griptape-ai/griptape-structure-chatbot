@@ -156,7 +156,7 @@ GT_STRUCTURE_ID=<your-structure-id>
 1. Run Griptape Chat
 In your CLI in the Griptape Chat folder
 ```shell 
-poetry python run app.py 
+poetry run python app.py 
 ```
 ## Invoke the Lambda Function
 
