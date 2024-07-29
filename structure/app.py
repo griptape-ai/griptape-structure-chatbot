@@ -1,5 +1,5 @@
 import json
-import boto3
+import boto
 import os
 import sys
 from dotenv import load_dotenv
@@ -21,7 +21,7 @@ load_dotenv()
 # Get environment variables 
 base_url = os.environ["GT_CLOUD_BASE_URL"]
 # If no API key is provided, will default to an empty string since it isn't necessary for local development.
-api_key = os.environ.get("GT_CLOUD_API_KEY", "")
+api_key = os.environ.get("GT_CLOUD_API_KEY", "GRIPTAPE_API_KEY")
 
 # If running in the cloud, will load these variables from the cloud environment. Otherwise will default to "ConversationMemoryTable". 
 conversation_memory_table_name = os.environ.get("CONVERSATION_MEMORY_TABLE_NAME", "ConversationMemoryTable")
