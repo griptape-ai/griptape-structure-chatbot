@@ -1,5 +1,7 @@
 # Griptape Structure Chatbot
 
+Original repository author: @zachgiordano 
+
 ## Description 
 This project creates an AWS CDK and deploys it with a Griptape Structure to invoke the Structure for use as a chatbot with the Gradio Interface in the Griptape Cloud. 
 Deploying the CDK creates both a DynamoDB table with AWS and creates a Griptape Structure in the Griptape Cloud. 
@@ -91,7 +93,7 @@ To run the structure with Gradio, you need to clone and configure the Griptape C
         GITHUB_REPO_NAME=<your-repo-name>
         GITHUB_REPO_BRANCH=<your-branch>
 ```
-Put your structure in place of the structure/app.py, but add the conversation_memory to YOUR agent.
+Create your agent in the function init_structure in place of the structure in structure/app.py. Add the conversation_memory to YOUR agent.
 
 ```python
     conversation_memory=ConversationMemory(
@@ -107,9 +109,8 @@ Put your structure in place of the structure/app.py, but add the conversation_me
         )
     )
 ```
-Keep the parsing information at the bottom of the app.py - this is necessary for the way that Gradio passes in the session_id and inputs. 
 
-Define your agent in the function init_structure in order to pass the session_id when initializing the conversation memory. 
+Keep the parsing information at the bottom of the app.py - this is necessary for the way that Gradio passes in the session_id and inputs. 
 
 ```python
     # TODO: Keep this logic for running your own structure
@@ -122,7 +123,7 @@ Define your agent in the function init_structure in order to pass the session_id
 
 
 ### If you do not plan on modifying the structure: 
-    1. Clone the Repository
+1. Clone the Repository
 ```shell
         git clone git!@github.com:griptape-ai/griptape-structure-chatbot.git
 ```
