@@ -10,7 +10,7 @@ secrets_extension_port = os.environ["SECRETS_EXTENSION_HTTP_PORT"]
 
 github_repo_owner = os.getenv("GITHUB_REPO_OWNER", "griptape-ai")
 github_repo_name = os.getenv("GITHUB_REPO_NAME", "griptape-structure-chatbot")
-github_structure_branch = os.getenv("GITHUB_REPO_BRANCH", "gradio-compatible")
+github_structure_branch = os.getenv("GITHUB_REPO_BRANCH", "main")
 # Adding .env variables for the user's specific agent 
 structure_file_path = os.getenv("STRUCTURE_FILE_PATH", "structure/app.py")
 requirements_file_path = os.getenv("REQUIREMENTS_FILE_PATH", "structure/requirements.txt")
@@ -106,7 +106,7 @@ def on_update(event, griptape_api_client, griptape_api_key):
     props_past = event["OldResourceProperties"]
     print("update resource %s with props %s" % (physical_id, props))
     # If the branch has changed, the structure is re-created. 
-    if props["github_repo_branch"] != props_past["github_repo_branch"]:
+    if props != props_past:
         # Creates a new structure  
         aws_access_key_id, aws_secret_access_key = get_griptape_aws_user_secret()
         create_structure_params = {
