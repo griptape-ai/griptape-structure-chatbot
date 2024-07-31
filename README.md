@@ -25,13 +25,13 @@ Follow the instructions for your OS.
 
 Values for the SSO: 
 
-`SSO session name (Recommended): my-sso`
+    `SSO session name (Recommended): my-sso`
 
-`SSO start URL [None]: <YourStartURL>`
+    `SSO start URL [None]: <YourStartURL>`
 
-`SSO region [None]: <YourRegion>`
+    `SSO region [None]: <YourRegion>`
 
-`SSO registration scopes [None]: sso:account:access`
+    `SSO registration scopes [None]: sso:account:access`
 
 ```shell
     aws s3 ls --profile <YourProfileName>
