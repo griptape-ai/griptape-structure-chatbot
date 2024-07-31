@@ -84,16 +84,16 @@ To run the structure with Gradio, you need to clone and configure the Griptape C
 
 ## Environment Setup
 
-### If you plan on modifying the structure to be deployed to the cloud: 
-1. Create your own Repository on Github
-1. Copy the code into your repository 
-1. Set the .env variables based on your information.
+### If you plan on modifying the structure to be deployed to the cloud:  
+1. Set the .env variables based on the repository of your structure.
 ```shell
         GITHUB_REPO_OWNER=<your-owner>
         GITHUB_REPO_NAME=<your-repo-name>
         GITHUB_REPO_BRANCH=<your-branch>
+        STRUCTURE_FILE_PATH=<your-path-from-repo>
+        REQUIREMENTS_FILE_PATH=<your-path-from-repo>
 ```
-Create your agent in the function init_structure in place of the structure in structure/app.py. Add the conversation_memory to YOUR agent.
+In your repository, add this configuration to your agent and pass a session_id when creating your agent.
 
 ```python
     conversation_memory=ConversationMemory(
@@ -110,7 +110,7 @@ Create your agent in the function init_structure in place of the structure in st
     )
 ```
 
-Keep the parsing information at the bottom of the app.py - this is necessary for the way that Gradio passes in the session_id and inputs. 
+Update your structure with the parsing information at the bottom of the app.py - this is necessary for the way that Gradio passes in the session_id and inputs. Replace ```init_structure``` with your own agent creation method. 
 
 ```python
     # TODO: Keep this logic for running your own structure
@@ -155,6 +155,7 @@ If necessary to sign into an IAM Identity Center session:
 1.  `npm run deploy`
 
 ## Run Structure in Skatepark
+*This can only be accomplished after deploying the CDK*
 Prerequisites: 
 1. Go to IAM Dashboard 
 1. Under Access Management go to Users

@@ -11,6 +11,9 @@ secrets_extension_port = os.environ["SECRETS_EXTENSION_HTTP_PORT"]
 github_repo_owner = os.getenv("GITHUB_REPO_OWNER", "griptape-ai")
 github_repo_name = os.getenv("GITHUB_REPO_NAME", "griptape-structure-chatbot")
 github_structure_branch = os.getenv("GITHUB_REPO_BRANCH", "gradio-compatible")
+# Adding .env variables for the user's specific agent 
+structure_file_path = os.getenv("STRUCTURE_FILE_PATH", "structure/app.py")
+requirements_file_path = os.getenv("REQUIREMENTS_FILE_PATH", "structure/requirements.txt")
 
 http = urllib3.PoolManager()
 
@@ -82,8 +85,8 @@ def on_create(event, griptape_api_client, griptape_api_key):
             "GT_CLOUD_API_KEY": griptape_api_key,
             "AWS_SECRET_ACCESS_KEY": aws_secret_access_key,
         },
-        "main_file": "structure/app.py",
-        "requirements_file": "structure/requirements.txt",
+        "main_file": structure_file_path,
+        "requirements_file": requirements_file_path,
     }
 
     structure_response = griptape_api_client.create_structure(
@@ -126,8 +129,8 @@ def on_update(event, griptape_api_client, griptape_api_key):
                 "GT_CLOUD_API_KEY": griptape_api_key,
                 "AWS_SECRET_ACCESS_KEY": aws_secret_access_key,
             },
-            "main_file": "structure/app.py",
-            "requirements_file": "structure/requirements.txt",
+            "main_file": structure_file_path,
+            "requirements_file": requirements_file_path,
         }
         structure_response = griptape_api_client.create_structure(
             params=create_structure_params
