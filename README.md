@@ -93,7 +93,26 @@ To run the structure with Gradio, you need to clone and configure the Griptape C
         STRUCTURE_FILE_PATH=<your-path-from-repo>
         REQUIREMENTS_FILE_PATH=<your-path-from-repo>
 ```
-In your repository, add this configuration to your agent and pass a session_id when creating your agent.
+2. Add additonal env and secret_env variables in the .env if your Structure requires them.
+3. Then update the lambdas/griptape-structure-provider/index.py with the necessary variables in the 'on_create' and 'on_update' methods. 
+```python
+"env": {
+            "AWS_ACCESS_KEY_ID": aws_access_key_id,
+            "AWS_DEFAULT_REGION": os.environ["AWS_REGION"],
+            "CONVERSATION_MEMORY_TABLE_NAME": os.environ[
+                "CONVERSATION_MEMORY_TABLE_NAME"
+            ],
+            #YOUR ENV VALUES HERE
+        },
+        "env_secret": {
+            "OPENAI_API_KEY": get_openai_api_key(),
+            "GT_CLOUD_API_KEY": griptape_api_key,
+            "AWS_SECRET_ACCESS_KEY": aws_secret_access_key,
+            #YOUR ENV_SECRET VALUES HERE
+        },
+```
+
+4. In your repository, add this configuration to your agent and pass a session_id when creating your agent.
 
 ```python
     conversation_memory=ConversationMemory(
@@ -110,7 +129,7 @@ In your repository, add this configuration to your agent and pass a session_id w
     )
 ```
 
-Update your structure with the parsing information at the bottom of the app.py - this is necessary for the way that Gradio passes in the session_id and inputs. Replace ```init_structure``` with your own agent creation method. 
+5. Update your structure with the parsing information at the bottom of the app.py - this is necessary for the way that Gradio passes in the session_id and inputs. Replace ```init_structure``` with your own agent creation method. 
 
 ```python
     # TODO: Keep this logic for running your own structure
@@ -195,7 +214,7 @@ After you deploy the structure
 ```shell
     GT_STRUCTURE_ID=<your-structure-id>
 ```
-1. Run Griptape Chat
+## Run Griptape Chat
 In your CLI in the Griptape Chat folder
 ```shell 
     poetry run python app.py 

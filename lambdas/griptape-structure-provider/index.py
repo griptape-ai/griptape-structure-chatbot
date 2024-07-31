@@ -79,11 +79,13 @@ def on_create(event, griptape_api_client, griptape_api_key):
             "CONVERSATION_MEMORY_TABLE_NAME": os.environ[
                 "CONVERSATION_MEMORY_TABLE_NAME"
             ],
+            # Add env variables if neccessary 
         },
         "env_secret": {
             "OPENAI_API_KEY": get_openai_api_key(),
             "GT_CLOUD_API_KEY": griptape_api_key,
             "AWS_SECRET_ACCESS_KEY": aws_secret_access_key,
+            # Add env_secret variables if neccessary
         },
         "main_file": structure_file_path,
         "requirements_file": requirements_file_path,
@@ -123,11 +125,13 @@ def on_update(event, griptape_api_client, griptape_api_key):
                 "CONVERSATION_MEMORY_TABLE_NAME": os.environ[
                     "CONVERSATION_MEMORY_TABLE_NAME"
                 ],
+                # Add env variables if neccessary
             },
             "env_secret": {
                 "OPENAI_API_KEY": get_openai_api_key(),
                 "GT_CLOUD_API_KEY": griptape_api_key,
                 "AWS_SECRET_ACCESS_KEY": aws_secret_access_key,
+                # Add env_secret variables if neccessary
             },
             "main_file": structure_file_path,
             "requirements_file": requirements_file_path,
