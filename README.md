@@ -3,8 +3,8 @@
 Original repository author: @zachgiordano 
 
 ## Description 
-This project creates an AWS CDK and deploys it with a Griptape Structure to invoke the Structure for use as a chatbot with the Gradio Interface in the Griptape Cloud. 
-Deploying the CDK creates both a DynamoDB table with AWS and creates a Griptape Structure in the Griptape Cloud. 
+This project runs a script that generates resources through an AWS CDK and deploys it with a Griptape Structure to invoke the Structure for use as a chatbot with the Gradio Interface in the Griptape Cloud. 
+Deploying the resources creates both a DynamoDB table with AWS and creates a Griptape Structure in the Griptape Cloud. 
 Once deployed, the user can call the Griptape Structure with the Griptape Cloud to invoke their structure. 
 
 ## Prerequisites
@@ -43,7 +43,7 @@ You need:
 
 1. Node.js installed
 
-This is necessary in order to use and deploy aws-cdk. 
+This is necessary in order to install aws-cdk. 
 
 ```shell
     https://nodejs.org/en/download/package-manager
