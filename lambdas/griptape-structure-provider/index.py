@@ -12,10 +12,10 @@ openai_api_key_secret_name = os.environ.get("OPENAI_API_KEY_SECRET_NAME")
 secrets_extension_port = os.environ["SECRETS_EXTENSION_HTTP_PORT"]
 
 github_repo_owner = os.getenv("GITHUB_REPO_OWNER", "griptape-ai")
-github_repo_name = os.getenv("GITHUB_REPO_NAME", "griptape-cbd-webscraper") #CHANGE BACK
-github_structure_branch = os.getenv("GITHUB_REPO_BRANCH", "Memory-update")
+github_repo_name = os.getenv("GITHUB_REPO_NAME", "griptape-structure-chatbot") #CHANGE BACK
+github_structure_branch = os.getenv("GITHUB_REPO_BRANCH", "main")
 # Adding .env variables for the user's specific agent 
-structure_config_file_path = os.getenv("STRUCTURE_CONFIG_FILE_PATH", "structure_config.yaml")
+structure_config_file_path = os.getenv("STRUCTURE_CONFIG_FILE_PATH", "structure/structure_config.yaml")
 
 http = urllib3.PoolManager()
 
