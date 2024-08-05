@@ -1,7 +1,5 @@
 # Griptape Structure Chatbot
 
-Original repository author: @zachgiordano 
-
 ## Description 
 This project runs a script that generates resources through an AWS CDK and deploys it with a Griptape Structure to invoke the Structure for use as a chatbot with the Gradio Interface in the Griptape Cloud. 
 Deploying the resources creates both a DynamoDB table with AWS and creates a Griptape Structure in the Griptape Cloud. 
