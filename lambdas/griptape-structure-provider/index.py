@@ -1,7 +1,10 @@
 import json
 import os
 import urllib3
+from dotenv import load_dotenv
 from clients.griptape_api_client import GriptapeApiClient
+
+load_dotenv()
 
 griptape_api_key_secret_name = os.environ.get("GRIPTAPE_API_KEY_SECRET_NAME")
 griptape_aws_user_secret_name = os.environ.get("GRIPTAPE_AWS_USER_SECRET_NAME")
@@ -9,10 +12,10 @@ openai_api_key_secret_name = os.environ.get("OPENAI_API_KEY_SECRET_NAME")
 secrets_extension_port = os.environ["SECRETS_EXTENSION_HTTP_PORT"]
 
 github_repo_owner = os.getenv("GITHUB_REPO_OWNER", "griptape-ai")
-github_repo_name = os.getenv("GITHUB_REPO_NAME", "griptape-structure-chatbot")
-github_structure_branch = os.getenv("GITHUB_REPO_BRANCH", "main")
+github_repo_name = os.getenv("GITHUB_REPO_NAME", "griptape-cbd-webscraper") #CHANGE BACK
+github_structure_branch = os.getenv("GITHUB_REPO_BRANCH", "Memory-update")
 # Adding .env variables for the user's specific agent 
-structure_config_file_path = os.getenv("STRUCTURE_CONFIG_FILE_PATH", "structure/structure_config.yaml")
+structure_config_file_path = os.getenv("STRUCTURE_CONFIG_FILE_PATH", "structure_config.yaml")
 
 http = urllib3.PoolManager()
 
