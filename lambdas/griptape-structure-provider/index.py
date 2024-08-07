@@ -10,6 +10,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 # Construct the path to the .env file
 env_path = os.path.join(os.path.dirname(os.path.dirname(current_dir)), '.env')
 
+# Load the .env file
 load_dotenv(env_path)
 
 griptape_api_key_secret_name = os.environ.get("GRIPTAPE_API_KEY_SECRET_NAME")
