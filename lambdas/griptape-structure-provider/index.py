@@ -4,7 +4,13 @@ import urllib3
 from dotenv import load_dotenv
 from clients.griptape_api_client import GriptapeApiClient
 
-load_dotenv()
+# Get the current working directory
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Construct the path to the .env file
+env_path = os.path.join(os.path.dirname(os.path.dirname(current_dir)), '.env')
+
+load_dotenv(env_path)
 
 griptape_api_key_secret_name = os.environ.get("GRIPTAPE_API_KEY_SECRET_NAME")
 griptape_aws_user_secret_name = os.environ.get("GRIPTAPE_AWS_USER_SECRET_NAME")
@@ -12,10 +18,12 @@ openai_api_key_secret_name = os.environ.get("OPENAI_API_KEY_SECRET_NAME")
 secrets_extension_port = os.environ["SECRETS_EXTENSION_HTTP_PORT"]
 
 github_repo_owner = os.getenv("GITHUB_REPO_OWNER", "griptape-ai")
-github_repo_name = os.getenv("GITHUB_REPO_NAME", "griptape-structure-chatbot")
-github_structure_branch = os.getenv("GITHUB_REPO_BRANCH", "main")
-# Adding .env variables for the user's specific agent 
-structure_config_file_path = os.getenv("STRUCTURE_CONFIG_FILE_PATH", "structure/structure_config.yaml")
+github_repo_name = os.getenv("GITHUB_REPO_NAME", "griptape-structure-chatbot") 
+github_structure_branch = os.getenv("GITHUB_REPO_BRANCH", "main") 
+structure_config_file_path = os.getenv("STRUCTURE_CONFIG_FILE_PATH", "/structure/structure_config.yaml")
+
+
+
 
 http = urllib3.PoolManager()
 
@@ -78,19 +86,21 @@ def on_create(event, griptape_api_client, griptape_api_key):
         "env": {
             "AWS_ACCESS_KEY_ID": aws_access_key_id,
             "AWS_DEFAULT_REGION": os.environ["AWS_REGION"],
-            "CONVERSATION_MEMORY_TABLE_NAME": os.environ[
-                "CONVERSATION_MEMORY_TABLE_NAME"
-            ],
-            # Add env variables if neccessary 
+            "CONVERSATION_MEMORY_TABLE_NAME": os.environ["CONVERSATION_MEMORY_TABLE_NAME"],
+            # Add env variables if necessary
+            # Example: "BEDROCK_ACCESS_KEY_ID":os.getenv("BEDROCK_ACCESS_KEY_ID"),
+
         },
         "env_secret": {
             "OPENAI_API_KEY": get_openai_api_key(),
             "GT_CLOUD_API_KEY": griptape_api_key,
             "AWS_SECRET_ACCESS_KEY": aws_secret_access_key,
-            # Add env_secret variables if neccessary
+            # Add env_secret variables if necessary
+            # Example: "BEDROCK_SECRET_ACCESS_KEY":os.getenv("BEDROCK_SECRET_ACCESS_KEY"),
         },
-        "configuration_file": structure_config_file_path,
+        "structure_config_file": structure_config_file_path,
     }
+    print(create_structure_params)
 
     structure_response = griptape_api_client.create_structure(
         params=create_structure_params
@@ -126,15 +136,15 @@ def on_update(event, griptape_api_client, griptape_api_key):
                 "CONVERSATION_MEMORY_TABLE_NAME": os.environ[
                     "CONVERSATION_MEMORY_TABLE_NAME"
                 ],
-                # Add env variables if neccessary
+                # Add env variables if neccessary (same as in on_create)
             },
             "env_secret": {
                 "OPENAI_API_KEY": get_openai_api_key(),
                 "GT_CLOUD_API_KEY": griptape_api_key,
                 "AWS_SECRET_ACCESS_KEY": aws_secret_access_key,
-                # Add env_secret variables if neccessary
+                # Add env_secret variables if neccessary (same as in on_create)
             },
-            "configuration_file": structure_config_file_path,
+            "structure_config_file": structure_config_file_path,
         }
         structure_response = griptape_api_client.create_structure(
             params=create_structure_params

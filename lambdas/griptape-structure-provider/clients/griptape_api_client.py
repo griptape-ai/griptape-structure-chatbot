@@ -26,6 +26,7 @@ class GriptapeApiClient:
         response = requests.post(url, headers=self.headers, json=params)
 
         response.raise_for_status()
+        print(response)
 
         return response.json()
 
