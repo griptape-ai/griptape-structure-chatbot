@@ -142,7 +142,7 @@ To run the structure with Gradio, you need to clone and configure the Griptape C
 ### If you do not plan on modifying the structure: 
 1. Clone the Repository
 ```shell
-        git clone git!@github.com:griptape-ai/griptape-structure-chatbot.git
+    git clone git!@github.com:griptape-ai/griptape-structure-chatbot.git
 ```
 ### Install dependencies
 ```shell
@@ -180,7 +180,7 @@ Prerequisites:
 1. Create an access key and save the values in the .env: 
 ```shell
     AWS_ACCESS_KEY_ID=<YourAccessKey>
-    AWS_SECRET_ACCESS_KEY=<YourAccessKey>
+    AWS_SECRET_ACCESS_KEY=<YourSecretAccessKey>
 ```
 Additional environment variables needed: 
 ```shell

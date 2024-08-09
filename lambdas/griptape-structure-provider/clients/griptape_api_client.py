@@ -1,10 +1,8 @@
 from __future__ import annotations
 from typing import Optional
 import requests
-
 from attrs import Factory, define, field
 from urllib.parse import urljoin
-
 
 @define
 class GriptapeApiClient:
@@ -24,24 +22,17 @@ class GriptapeApiClient:
     def create_structure(self, params: dict) -> dict:
         url = urljoin(self.base_url, "/api/structures/")
         response = requests.post(url, headers=self.headers, json=params)
-
         response.raise_for_status()
-        print(response)
-
         return response.json()
 
     def update_structure(self, structure_id: str, params: Optional[dict]) -> dict:
         url = urljoin(self.base_url, f"/api/structures/{structure_id}/")
         response = requests.post(url, headers=self.headers, json=params)
-        
         response.raise_for_status()
-
         return response.json()
 
     def delete_structure(self, structure_id: str) -> dict:
         url = urljoin(self.base_url, f"/api/structures/{structure_id}/")
         response = requests.delete(url, headers=self.headers)
-
         response.raise_for_status()
-
         return response.json()

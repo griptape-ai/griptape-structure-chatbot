@@ -30,7 +30,6 @@ table_name = os.environ.get("DYNAMODB_TABLE_NAME", "ConversationMemoryTable")
 #Create an event listener for the GriptapeCloudStructure
 event_driver = GriptapeCloudEventListenerDriver(base_url=base_url, api_key=api_key)
 
-# TODO: REMOVE THIS IF DECIDING TO ALLOW THEIR OWN AGENT 
 # If using your own agent, replace the logic with your own agent initialization logic with the conversation memory configuration.
 def init_structure(session_id: str) -> Structure:
 
