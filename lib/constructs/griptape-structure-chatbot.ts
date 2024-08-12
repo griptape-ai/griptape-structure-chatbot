@@ -132,12 +132,12 @@ export class GriptapeStructureChatbot extends Construct {
       }
     );
 
-    const griptapeChatbotLambda = new PythonFunction(
+    const griptapeChatbotSessionManagerLambda = new PythonFunction(
       this,
-      "GriptapeChatbotLambda",
+      "GriptapeChatbotSessionManagerLambda",
       {
         description:
-          "Griptape Chatbot Lambda function to invoke a Griptape Structure",
+          "Griptape Chatbot Lambda function to manage sessions for Griptape Chats",
         entry: "lambdas/griptape-chatbot",
         runtime: Runtime.PYTHON_3_12,
         index: "index.py",
@@ -153,24 +153,24 @@ export class GriptapeStructureChatbot extends Construct {
         timeout: Duration.minutes(5),
       }
     );
-    griptapeChatbotLambda.addPermission("Invoke", {
+    griptapeChatbotSessionManagerLambda.addPermission("Invoke", {
       principal: new AnyPrincipal(),
     });
 
-    const fnUrl = griptapeChatbotLambda.addFunctionUrl({
+    const fnUrl = griptapeChatbotSessionManagerLambda.addFunctionUrl({
       authType: FunctionUrlAuthType.NONE,
       cors: {
         allowedOrigins: ["*"],
       },
     });
 
-    conversationMemoryTable.grantReadWriteData(griptapeChatbotLambda);
-    griptapeApiKeySecret.grantRead(griptapeChatbotLambda);
+    conversationMemoryTable.grantReadWriteData(griptapeChatbotSessionManagerLambda);
+    griptapeApiKeySecret.grantRead(griptapeChatbotSessionManagerLambda);
 
-    new CfnOutput(this, "GriptapeChatbotLambdaEndpoint", {
+    new CfnOutput(this, "GriptapeChatbotSessionManagerLambdaEndpoint", {
       value: fnUrl.url,
-      exportName: "GriptapeChatbotLambdaEndpoint",
-      description: "The endpoint of the Griptape Chatbot Lambda function",
+      exportName: "GriptapeChatbotSessionManagerLambdaEndpoint",
+      description: "The endpoint of the Griptape Chatbot Session Manager Lambda function",
     });
   }
 }
