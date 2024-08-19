@@ -41,7 +41,7 @@ class GriptapeApiClient:
         response.raise_for_status()
         return response.json()
 
-    # If secrets need to be retrieved - do we need this? could also retrive all with /secrets
+    # If secrets need to be retrieved
     def get_secret(self, secret_id: str) -> dict:
         url = urljoin(self.base_url, f"/api/secrets/{secret_id}/")
         response = requests.get(url, headers=self.headers)
