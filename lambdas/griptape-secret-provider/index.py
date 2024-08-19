@@ -14,8 +14,6 @@ env_path = os.path.join(os.path.dirname(os.path.dirname(current_dir)), ".env")
 load_dotenv(env_path)
 
 griptape_api_key_secret_name = os.environ.get("GRIPTAPE_API_KEY_SECRET_NAME")
-griptape_aws_user_secret_name = os.environ.get("GRIPTAPE_AWS_USER_SECRET_NAME")
-openai_api_key_secret_name = os.environ.get("OPENAI_API_KEY_SECRET_NAME")
 secrets_extension_port = os.environ["SECRETS_EXTENSION_HTTP_PORT"]
 
 

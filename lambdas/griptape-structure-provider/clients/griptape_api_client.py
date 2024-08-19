@@ -4,6 +4,7 @@ import requests
 from attrs import Factory, define, field
 from urllib.parse import urljoin
 
+
 @define
 class GriptapeApiClient:
     base_url: str = field(default="https://cloud.griptape.ai", kw_only=True)

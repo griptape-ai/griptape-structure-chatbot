@@ -93,10 +93,18 @@ export class GriptapeStructureChatbot extends Construct {
         runtime: Runtime.PYTHON_3_12,
         index: "index.py",
         handler: "on_event",
+        environment:{
+          SECRETS_EXTENSION_HTTP_PORT: `${secretsHttpPort}`,
+          GRIPTAPE_API_KEY_SECRET_NAME: griptapeApiKeySecret.secretName,
+          GRIPTAPE_AWS_USER_SECRET_NAME: griptapeUserSecret.secretName,
+        },
         paramsAndSecrets,
         memorySize: 1024,
       }
     );
+
+    griptapeApiKeySecret.grantRead(griptapeSecretProviderLambda);
+    griptapeUserSecret.grantRead(griptapeSecretProviderLambda);
 
     const griptapeSecretProvider = new Provider(
       this,
@@ -159,7 +167,6 @@ export class GriptapeStructureChatbot extends Construct {
           GRIPTAPE_AWS_USER_SECRET_NAME: griptapeUserSecret.secretName,
           OPENAI_API_KEY_SECRET_NAME: openaiApiKeySecret.secretName,
           CONVERSATION_MEMORY_TABLE_NAME: conversationMemoryTable.tableName,
-          // Secret IDs from our custom resources 
           GT_API_KEY_SECRET_ID : griptapeSecretProviderResourceGT.ref,
           OPENAI_API_KEY_SECRET_ID : griptapeSecretProviderResourceOpenAI.ref,
           AWS_SECRET_ACCESS_KEY_SECRET_ID : griptapeSecretProviderResourceAWSSecret.ref,
