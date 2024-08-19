@@ -1,6 +1,5 @@
 import json
 import os
-from fastapi import params
 import urllib3
 from dotenv import load_dotenv
 from clients.griptape_api_client import GriptapeApiClient
