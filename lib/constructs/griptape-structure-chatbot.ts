@@ -85,6 +85,66 @@ export class GriptapeStructureChatbot extends Construct {
       }
     );
 
+    const griptapeSecretProviderLambda = new PythonFunction(
+      this,
+      "GriptapeSecretProviderLambda",
+      {
+        entry: "lambdas/griptape-secret-provider",
+        runtime: Runtime.PYTHON_3_12,
+        index: "index.py",
+        handler: "on_event",
+        paramsAndSecrets,
+        memorySize: 1024,
+      }
+    );
+
+    const griptapeSecretProvider = new Provider(
+      this,
+      "GriptapeSecretProvider",
+      {
+        onEventHandler: griptapeSecretProviderLambda,
+        logGroup: new LogGroup(this, "GriptapeSecretProviderLogs", {
+          retention: RetentionDays.ONE_WEEK,
+        }),
+      }
+    );
+
+    const griptapeSecretProviderResourceGT = new CustomResource(
+      this,
+      "GriptapeSecretProviderResourceGT",
+      {
+        serviceToken: griptapeSecretProvider.serviceToken,
+        properties:{
+          secret_name: "GT_CLOUD_API_KEY",
+          secret_value: process.env.GT_CLOUD_API_KEY,
+        }
+      }
+    );
+
+    const griptapeSecretProviderResourceOpenAI = new CustomResource(
+      this,
+      "GriptapeSecretProviderResourceOpenAI",
+      {
+        serviceToken: griptapeSecretProvider.serviceToken,
+        properties:{
+          secret_name: "OPENAI_API_KEY",
+          secret_value: process.env.OPENAI_API_KEY,
+        }
+      }
+    );
+
+    const griptapeSecretProviderResourceAWSSecret = new CustomResource(
+      this,
+      "GriptapeSecretProviderResourceAWSSecret",
+      {
+        serviceToken: griptapeSecretProvider.serviceToken,
+        properties:{
+          secret_name: "AWS_SECRET_ACCESS_KEY",
+          secret_value: process.env.AWS_SECRET_ACCESS_KEY,
+        }
+      }
+    );
+
     const griptapeStructureProviderLambda = new PythonFunction(
       this,
       "GriptapeStructureProviderLambda",
@@ -99,6 +159,10 @@ export class GriptapeStructureChatbot extends Construct {
           GRIPTAPE_AWS_USER_SECRET_NAME: griptapeUserSecret.secretName,
           OPENAI_API_KEY_SECRET_NAME: openaiApiKeySecret.secretName,
           CONVERSATION_MEMORY_TABLE_NAME: conversationMemoryTable.tableName,
+          // Secret IDs from our custom resources 
+          GT_API_KEY_SECRET_ID : griptapeSecretProviderResourceGT.ref,
+          OPENAI_API_KEY_SECRET_ID : griptapeSecretProviderResourceOpenAI.ref,
+          AWS_SECRET_ACCESS_KEY_SECRET_ID : griptapeSecretProviderResourceAWSSecret.ref,
         },
         paramsAndSecrets,
         memorySize: 1024,
