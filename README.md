@@ -91,26 +91,7 @@ To run the structure with Gradio, you need to clone and configure the Griptape C
         STRUCTURE_FILE_PATH=<your-path-from-repo>
         REQUIREMENTS_FILE_PATH=<your-path-from-repo>
 ```
-2. Add additonal env and secret_env variables in the .env if your Structure requires them.
-3. Then update the lambdas/griptape-structure-provider/index.py with the necessary variables in the 'on_create' and 'on_update' methods. 
-```python
-"env": {
-            "AWS_ACCESS_KEY_ID": aws_access_key_id,
-            "AWS_DEFAULT_REGION": os.environ["AWS_REGION"],
-            "CONVERSATION_MEMORY_TABLE_NAME": os.environ[
-                "CONVERSATION_MEMORY_TABLE_NAME"
-            ],
-            #YOUR ENV VALUES HERE
-        },
-        "env_secret": {
-            "OPENAI_API_KEY": get_openai_api_key(),
-            "GT_CLOUD_API_KEY": griptape_api_key,
-            "AWS_SECRET_ACCESS_KEY": aws_secret_access_key,
-            #YOUR ENV_SECRET VALUES HERE
-        },
-```
-
-4. In your repository, add this configuration to your agent and pass a session_id when creating your agent.
+2. In your repository, add this configuration to your agent and pass a session_id when creating your agent.
 
 ```python
     conversation_memory=ConversationMemory(
@@ -127,7 +108,7 @@ To run the structure with Gradio, you need to clone and configure the Griptape C
     )
 ```
 
-5. Update your structure with the parsing information at the bottom of the app.py - this is necessary for the way that Gradio passes in the session_id and inputs. Replace ```init_structure``` with your own agent creation method. 
+3. Update your structure with the parsing information at the bottom of the app.py - this is necessary for the way that Gradio passes in the session_id and inputs. Replace ```init_structure``` with your own agent creation method. 
 
 ```python
     # TODO: Keep this logic for running your own structure
@@ -137,6 +118,11 @@ To run the structure with Gradio, you need to clone and configure the Griptape C
         agent = init_structure(input_arg_dict["session_id"])
         agent.run(input_arg_dict["input"])
 ```
+
+4. Add additional environment variables in the Griptape Cloud 
+    [Create any additional](https://cloud.griptape.ai/configuration/secrets) secrets necessary and add them to your structure in the [Griptape Cloud](https://cloud.griptape.ai/structures).
+
+    Add non-secret environment variables to your structure. 
 
 
 ### If you do not plan on modifying the structure: 
