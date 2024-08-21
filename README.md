@@ -91,7 +91,7 @@ To run the structure with Gradio, you need to clone and configure the Griptape C
         STRUCTURE_FILE_PATH=<your-path-from-repo>
         REQUIREMENTS_FILE_PATH=<your-path-from-repo>
 ```
-2. In your repository, add this configuration to your agent and pass a session_id when creating your agent.
+1. In your repository, add this configuration to your agent and pass a session_id when creating your agent.
 
 ```python
     conversation_memory=ConversationMemory(
@@ -108,7 +108,7 @@ To run the structure with Gradio, you need to clone and configure the Griptape C
     )
 ```
 
-3. Update your structure with the parsing information at the bottom of the app.py - this is necessary for the way that Gradio passes in the session_id and inputs. Replace ```init_structure``` with your own agent creation method. 
+1. Update your structure with the parsing information at the bottom of the app.py - this is necessary for the way that Gradio passes in the session_id and inputs. Replace ```init_structure``` with your own agent creation method. 
 
 ```python
     # TODO: Keep this logic for running your own structure
@@ -118,12 +118,6 @@ To run the structure with Gradio, you need to clone and configure the Griptape C
         agent = init_structure(input_arg_dict["session_id"])
         agent.run(input_arg_dict["input"])
 ```
-
-4. Add additional environment variables in the Griptape Cloud 
-    [Create any additional](https://cloud.griptape.ai/configuration/secrets) secrets necessary and add them to your structure in the [Griptape Cloud](https://cloud.griptape.ai/structures).
-
-    Add non-secret environment variables to your structure. 
-
 
 ### If you do not plan on modifying the structure: 
 1. Clone the Repository
@@ -194,6 +188,22 @@ If you change any environment variables
 ## Run Structure in GriptapeCloud with Griptape Chat
 After you deploy the structure
 1. Get the Structure ID from the Griptape Structure Chatbot: https://cloud.griptape.ai/structures
+1. Add additional environment variables in the Griptape Cloud 
+    1. [Create any additional](https://cloud.griptape.ai/configuration/secrets) secrets necessary and add them to your structure in the [Griptape Cloud](https://cloud.griptape.ai/structures). 
+        1. ex: Adding a Zenrows API Key 
+            1. Click `Create Secret`
+                1. Name: `Zenrows API Key`
+                1. Value: `<your-Zenrows-API-key-value>`
+            1. Go to your structure and click `Add Variable`.
+                1. Name: `ZENROWS_API_KEY`
+                1. Source: `Secret`
+                1. Value: select `Zenrows API Key` from the dropdown menu.
+    1. Add any environment variables that your structure requires that haven't already been set by clicking `Add Variable` and setting the source to `Manual`. 
+        1. ex: Adding a Knowledge Base
+            1. Click `Add Variable`
+                1. Name: `KNOWLEDGE_BASE_ID`
+                1. Source: `Manual`
+                1. Value: `<your-kb-id>`
 1. Put the Structure ID in your .env in [Griptape Chat](https://github.com/griptape-ai/griptape-chat)
 ```shell
     GT_STRUCTURE_ID=<your-structure-id>

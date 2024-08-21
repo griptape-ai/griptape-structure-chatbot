@@ -123,7 +123,7 @@ export class GriptapeStructureChatbot extends Construct {
       {
         serviceToken: griptapeSecretProvider.serviceToken,
         properties:{
-          secret_name: "GT_CLOUD_API_KEY",
+          secret_name: "GT Cloud API Key",
           secret_value: process.env.GT_CLOUD_API_KEY,
         }
       }
@@ -135,7 +135,7 @@ export class GriptapeStructureChatbot extends Construct {
       {
         serviceToken: griptapeSecretProvider.serviceToken,
         properties:{
-          secret_name: "OPENAI_API_KEY",
+          secret_name: "OpenAI API Key",
           secret_value: process.env.OPENAI_API_KEY,
         }
       }
@@ -147,7 +147,7 @@ export class GriptapeStructureChatbot extends Construct {
       {
         serviceToken: griptapeSecretProvider.serviceToken,
         properties:{
-          secret_name: "AWS_SECRET_ACCESS_KEY",
+          secret_name: "AWS Secret Access Key",
           secret_value: process.env.AWS_SECRET_ACCESS_KEY,
         }
       }
