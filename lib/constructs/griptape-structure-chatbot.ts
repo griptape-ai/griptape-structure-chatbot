@@ -85,6 +85,74 @@ export class GriptapeStructureChatbot extends Construct {
       }
     );
 
+    const griptapeSecretProviderLambda = new PythonFunction(
+      this,
+      "GriptapeSecretProviderLambda",
+      {
+        entry: "lambdas/griptape-secret-provider",
+        runtime: Runtime.PYTHON_3_12,
+        index: "index.py",
+        handler: "on_event",
+        environment:{
+          SECRETS_EXTENSION_HTTP_PORT: `${secretsHttpPort}`,
+          GRIPTAPE_API_KEY_SECRET_NAME: griptapeApiKeySecret.secretName,
+          GRIPTAPE_AWS_USER_SECRET_NAME: griptapeUserSecret.secretName,
+        },
+        paramsAndSecrets,
+        memorySize: 1024,
+      }
+    );
+
+    griptapeApiKeySecret.grantRead(griptapeSecretProviderLambda);
+    griptapeUserSecret.grantRead(griptapeSecretProviderLambda);
+
+    const griptapeSecretProvider = new Provider(
+      this,
+      "GriptapeSecretProvider",
+      {
+        onEventHandler: griptapeSecretProviderLambda,
+        logGroup: new LogGroup(this, "GriptapeSecretProviderLogs", {
+          retention: RetentionDays.ONE_WEEK,
+        }),
+      }
+    );
+
+    const griptapeSecretProviderResourceGT = new CustomResource(
+      this,
+      "GriptapeSecretProviderResourceGT",
+      {
+        serviceToken: griptapeSecretProvider.serviceToken,
+        properties:{
+          secret_name: "GT Cloud API Key",
+          secret_value: process.env.GT_CLOUD_API_KEY,
+        }
+      }
+    );
+
+    const griptapeSecretProviderResourceOpenAI = new CustomResource(
+      this,
+      "GriptapeSecretProviderResourceOpenAI",
+      {
+        serviceToken: griptapeSecretProvider.serviceToken,
+        properties:{
+          secret_name: "OpenAI API Key",
+          secret_value: process.env.OPENAI_API_KEY,
+        }
+      }
+    );
+
+    const griptapeSecretProviderResourceAWSSecret = new CustomResource(
+      this,
+      "GriptapeSecretProviderResourceAWSSecret",
+      {
+        serviceToken: griptapeSecretProvider.serviceToken,
+        properties:{
+          secret_name: "AWS Secret Access Key",
+          secret_value: process.env.AWS_SECRET_ACCESS_KEY,
+        }
+      }
+    );
+
     const griptapeStructureProviderLambda = new PythonFunction(
       this,
       "GriptapeStructureProviderLambda",
@@ -99,6 +167,9 @@ export class GriptapeStructureChatbot extends Construct {
           GRIPTAPE_AWS_USER_SECRET_NAME: griptapeUserSecret.secretName,
           OPENAI_API_KEY_SECRET_NAME: openaiApiKeySecret.secretName,
           CONVERSATION_MEMORY_TABLE_NAME: conversationMemoryTable.tableName,
+          GT_API_KEY_SECRET_ID : griptapeSecretProviderResourceGT.ref,
+          OPENAI_API_KEY_SECRET_ID : griptapeSecretProviderResourceOpenAI.ref,
+          AWS_SECRET_ACCESS_KEY_SECRET_ID : griptapeSecretProviderResourceAWSSecret.ref,
         },
         paramsAndSecrets,
         memorySize: 1024,
@@ -132,12 +203,12 @@ export class GriptapeStructureChatbot extends Construct {
       }
     );
 
-    const griptapeChatbotLambda = new PythonFunction(
+    const griptapeChatbotSessionManagerLambda = new PythonFunction(
       this,
-      "GriptapeChatbotLambda",
+      "GriptapeChatbotSessionManagerLambda",
       {
         description:
-          "Griptape Chatbot Lambda function to invoke a Griptape Structure",
+          "Griptape Chatbot Lambda Session Manager function to manage sessions for Griptape Structure Chats ",
         entry: "lambdas/griptape-chatbot",
         runtime: Runtime.PYTHON_3_12,
         index: "index.py",
@@ -153,19 +224,19 @@ export class GriptapeStructureChatbot extends Construct {
         timeout: Duration.minutes(5),
       }
     );
-    griptapeChatbotLambda.addPermission("Invoke", {
+    griptapeChatbotSessionManagerLambda.addPermission("Invoke", {
       principal: new AnyPrincipal(),
     });
 
-    const fnUrl = griptapeChatbotLambda.addFunctionUrl({
+    const fnUrl = griptapeChatbotSessionManagerLambda.addFunctionUrl({
       authType: FunctionUrlAuthType.NONE,
       cors: {
         allowedOrigins: ["*"],
       },
     });
 
-    conversationMemoryTable.grantReadWriteData(griptapeChatbotLambda);
-    griptapeApiKeySecret.grantRead(griptapeChatbotLambda);
+    conversationMemoryTable.grantReadWriteData(griptapeChatbotSessionManagerLambda);
+    griptapeApiKeySecret.grantRead(griptapeChatbotSessionManagerLambda);
 
     new CfnOutput(this, "GriptapeChatbotLambdaEndpoint", {
       value: fnUrl.url,

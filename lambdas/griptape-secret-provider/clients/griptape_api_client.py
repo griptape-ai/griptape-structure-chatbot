@@ -20,20 +20,30 @@ class GriptapeApiClient:
         kw_only=True,
     )
 
-    def create_structure(self, params: dict) -> dict:
-        url = urljoin(self.base_url, "/api/structures/")
+    # Create each necessary secret
+    def create_secret(self, params: dict) -> dict:
+        url = urljoin(self.base_url, "/api/secrets/")
         response = requests.post(url, headers=self.headers, json=params)
         response.raise_for_status()
         return response.json()
 
-    def update_structure(self, structure_id: str, params: Optional[dict]) -> dict:
-        url = urljoin(self.base_url, f"/api/structures/{structure_id}/")
-        response = requests.post(url, headers=self.headers, json=params)
+    # If secrets need to be updated
+    def update_secret(self, secret_id: str, params: Optional[dict]) -> dict:
+        url = urljoin(self.base_url, f"/api/secrets/{secret_id}/")
+        response = requests.patch(url, headers=self.headers, json=params)
         response.raise_for_status()
         return response.json()
 
-    def delete_structure(self, structure_id: str) -> dict:
-        url = urljoin(self.base_url, f"/api/structures/{structure_id}/")
+    # If secrets need to be deleted
+    def delete_secret(self, secret_id: str) -> dict:
+        url = urljoin(self.base_url, f"/api/secrets/{secret_id}/")
         response = requests.delete(url, headers=self.headers)
+        response.raise_for_status()
+        return response.json()
+
+    # If secrets need to be retrieved
+    def get_secret(self, secret_id: str) -> dict:
+        url = urljoin(self.base_url, f"/api/secrets/{secret_id}/")
+        response = requests.get(url, headers=self.headers)
         response.raise_for_status()
         return response.json()
