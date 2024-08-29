@@ -128,7 +128,13 @@ To run the structure with Gradio, you need to clone and configure the Griptape C
 ```shell
     npm install
 ```
-Create a .env file, and populate it accordingly to .env.example file. 
+Create a .env file, and populate it accordingly to .env.example file.
+Add your Griptape Cloud API Key
+```shell
+    GRIPTAPE_API_KEY=<YOUR_GRIPTAPE_CLOUD_API_KEY>
+    CDK_DEFAULT_ACCOUNT=<YOUR_AWS_ACCOUNT_ID>
+    CDK_DEFAULT_REGION=<YOUR_REGION>
+```
 
 ## Deploy
 
