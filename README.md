@@ -67,7 +67,7 @@ You need:
 You need:
 
 1. A [Griptape Cloud account](https://cloud.griptape.ai)
-1. A [Griptape Cloud API Key](https://cloud.griptape.ai/account/api-keys)
+1. A [Griptape Cloud API Key](https://cloud.griptape.ai/configuration/api-keys)
 
 ### Open AI
 
